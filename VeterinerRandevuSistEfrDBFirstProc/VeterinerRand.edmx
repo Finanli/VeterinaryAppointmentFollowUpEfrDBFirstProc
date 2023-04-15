@@ -1,0 +1,905 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="VeterinerRandevuModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Calisanlar">
+          <Key>
+            <PropertyRef Name="calisanNo" />
+          </Key>
+          <Property Name="calisanNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="calisanAdi" Type="nvarchar" MaxLength="50" />
+          <Property Name="statu" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Hastalar">
+          <Key>
+            <PropertyRef Name="hastano" />
+          </Key>
+          <Property Name="hastano" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="hastaAdi" Type="nvarchar" MaxLength="50" />
+          <Property Name="hastaCinsi" Type="nvarchar" MaxLength="50" />
+          <Property Name="hastaYas" Type="int" />
+          <Property Name="Ebeveyn" Type="nvarchar" MaxLength="50" />
+          <Property Name="Tel" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Islemler">
+          <Key>
+            <PropertyRef Name="islemNo" />
+          </Key>
+          <Property Name="islemNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="islemAd" Type="nvarchar" MaxLength="50" />
+          <Property Name="islemUcret" Type="decimal" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="Kullanicilar">
+          <Key>
+            <PropertyRef Name="kullaniciNo" />
+          </Key>
+          <Property Name="kullaniciNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kullaniciAd" Type="nvarchar" MaxLength="50" />
+          <Property Name="sifre" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Randevular">
+          <Key>
+            <PropertyRef Name="randevuNo" />
+          </Key>
+          <Property Name="randevuNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="hastano" Type="int" />
+          <Property Name="calisanNo" Type="int" />
+          <Property Name="islemNo" Type="int" />
+          <Property Name="RandevuDate" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Randevular_Calisanlar">
+          <End Role="Calisanlar" Type="Self.Calisanlar" Multiplicity="0..1" />
+          <End Role="Randevular" Type="Self.Randevular" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Calisanlar">
+              <PropertyRef Name="calisanNo" />
+            </Principal>
+            <Dependent Role="Randevular">
+              <PropertyRef Name="calisanNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevular_Hastalar">
+          <End Role="Hastalar" Type="Self.Hastalar" Multiplicity="0..1" />
+          <End Role="Randevular" Type="Self.Randevular" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hastalar">
+              <PropertyRef Name="hastano" />
+            </Principal>
+            <Dependent Role="Randevular">
+              <PropertyRef Name="hastano" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevular_Islemler">
+          <End Role="Islemler" Type="Self.Islemler" Multiplicity="0..1" />
+          <End Role="Randevular" Type="Self.Randevular" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Islemler">
+              <PropertyRef Name="islemNo" />
+            </Principal>
+            <Dependent Role="Randevular">
+              <PropertyRef Name="islemNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="CalAdiAra" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="calisanAd" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="CalisanEkle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="calisanAdi" Type="nvarchar" Mode="In" />
+          <Parameter Name="statü" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="CalisanGuncelle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="calisanNo" Type="int" Mode="In" />
+          <Parameter Name="calisanAdi" Type="nvarchar" Mode="In" />
+          <Parameter Name="statu" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="CalisanListele" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="CalisanSil" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="calisanNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CalStatAra" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="statu" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="EbeveynTelAra" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="telefon" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Faturalar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="HastaAdAra" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="hastaAd" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="HastaCinsAra" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="hastacins" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="HastaEbeveynAra" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ebeveyn" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="HastaEkle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="hastaAdi" Type="nvarchar" Mode="In" />
+          <Parameter Name="hastaCinsi" Type="nvarchar" Mode="In" />
+          <Parameter Name="hastaYas" Type="int" Mode="In" />
+          <Parameter Name="ebeveyn" Type="nvarchar" Mode="In" />
+          <Parameter Name="telefon" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="HastaGuncelle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="hastano" Type="int" Mode="In" />
+          <Parameter Name="hastaAdi" Type="nvarchar" Mode="In" />
+          <Parameter Name="hastaCinsi" Type="nvarchar" Mode="In" />
+          <Parameter Name="hastaYas" Type="int" Mode="In" />
+          <Parameter Name="ebeveyn" Type="nvarchar" Mode="In" />
+          <Parameter Name="telefon" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="HastaListele" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="HastaSil" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="hastano" Type="int" Mode="In" />
+        </Function>
+        <Function Name="HastaYasAra" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="hastayas" Type="int" Mode="In" />
+        </Function>
+        <Function Name="HastUygIslemler" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="IslemAdAra" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="islemAd" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="IslemEkle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="islemAd" Type="nvarchar" Mode="In" />
+          <Parameter Name="islemUcret" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="IslemGuncelle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="islemno" Type="int" Mode="In" />
+          <Parameter Name="islemAd" Type="nvarchar" Mode="In" />
+          <Parameter Name="islemUcret" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="IslemListele" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="IslemSil" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="islemno" Type="int" Mode="In" />
+        </Function>
+        <Function Name="KullaniciAra" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="kullaniciAd" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="KullaniciEkle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="kullaniciAd" Type="nvarchar" Mode="In" />
+          <Parameter Name="sifre" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="KullaniciGuncelle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="kullaniciNo" Type="int" Mode="In" />
+          <Parameter Name="kullaniciAd" Type="nvarchar" Mode="In" />
+          <Parameter Name="sifre" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="KullaniciListele" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="KullaniciSil" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="kullaniciNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RandevuEkle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="hastano" Type="int" Mode="In" />
+          <Parameter Name="calisanNo" Type="int" Mode="In" />
+          <Parameter Name="islemNo" Type="int" Mode="In" />
+          <Parameter Name="randevudate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="RandevuGuncelle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="randevuno" Type="int" Mode="In" />
+          <Parameter Name="hastano" Type="int" Mode="In" />
+          <Parameter Name="calisanNo" Type="int" Mode="In" />
+          <Parameter Name="islemNo" Type="int" Mode="In" />
+          <Parameter Name="randevudate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="RandevuListele" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="RandevuSil" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="randevuno" Type="int" Mode="In" />
+        </Function>
+        <Function Name="YilllaraGoreKazanclari" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="YilllaraGoreYapIslemler" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="VeterinerRandevuModelStoreContainer">
+          <EntitySet Name="Calisanlar" EntityType="Self.Calisanlar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hastalar" EntityType="Self.Hastalar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Islemler" EntityType="Self.Islemler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kullanicilar" EntityType="Self.Kullanicilar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Randevular" EntityType="Self.Randevular" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Randevular_Calisanlar" Association="Self.FK_Randevular_Calisanlar">
+            <End Role="Calisanlar" EntitySet="Calisanlar" />
+            <End Role="Randevular" EntitySet="Randevular" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevular_Hastalar" Association="Self.FK_Randevular_Hastalar">
+            <End Role="Hastalar" EntitySet="Hastalar" />
+            <End Role="Randevular" EntitySet="Randevular" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevular_Islemler" Association="Self.FK_Randevular_Islemler">
+            <End Role="Islemler" EntitySet="Islemler" />
+            <End Role="Randevular" EntitySet="Randevular" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VeterinerRandevuModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Calisanlar">
+          <Key>
+            <PropertyRef Name="calisanNo" />
+          </Key>
+          <Property Name="calisanNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="calisanAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="statu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Randevulars" Relationship="VeterinerRandevuModel.FK_Randevular_Calisanlar" FromRole="Calisanlar" ToRole="Randevular" />
+        </EntityType>
+        <EntityType Name="Hastalar">
+          <Key>
+            <PropertyRef Name="hastano" />
+          </Key>
+          <Property Name="hastano" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="hastaAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="hastaCinsi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="hastaYas" Type="Int32" />
+          <Property Name="Ebeveyn" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Tel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Randevulars" Relationship="VeterinerRandevuModel.FK_Randevular_Hastalar" FromRole="Hastalar" ToRole="Randevular" />
+        </EntityType>
+        <EntityType Name="Islemler">
+          <Key>
+            <PropertyRef Name="islemNo" />
+          </Key>
+          <Property Name="islemNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="islemAd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="islemUcret" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="Randevulars" Relationship="VeterinerRandevuModel.FK_Randevular_Islemler" FromRole="Islemler" ToRole="Randevular" />
+        </EntityType>
+        <EntityType Name="Kullanicilar">
+          <Key>
+            <PropertyRef Name="kullaniciNo" />
+          </Key>
+          <Property Name="kullaniciNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kullaniciAd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sifre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Randevular">
+          <Key>
+            <PropertyRef Name="randevuNo" />
+          </Key>
+          <Property Name="randevuNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="hastano" Type="Int32" />
+          <Property Name="calisanNo" Type="Int32" />
+          <Property Name="islemNo" Type="Int32" />
+          <Property Name="RandevuDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Calisanlar" Relationship="VeterinerRandevuModel.FK_Randevular_Calisanlar" FromRole="Randevular" ToRole="Calisanlar" />
+          <NavigationProperty Name="Hastalar" Relationship="VeterinerRandevuModel.FK_Randevular_Hastalar" FromRole="Randevular" ToRole="Hastalar" />
+          <NavigationProperty Name="Islemler" Relationship="VeterinerRandevuModel.FK_Randevular_Islemler" FromRole="Randevular" ToRole="Islemler" />
+        </EntityType>
+        <EntityContainer Name="VeterinerRandevuEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Calisanlars" EntityType="Self.Calisanlar" />
+          <EntitySet Name="Hastalars" EntityType="Self.Hastalar" />
+          <EntitySet Name="Islemlers" EntityType="Self.Islemler" />
+          <EntitySet Name="Kullanicilars" EntityType="Self.Kullanicilar" />
+          <EntitySet Name="Randevulars" EntityType="Self.Randevular" />
+          <FunctionImport Name="CalisanEkle">
+            <Parameter Name="calisanAdi" Mode="In" Type="String" />
+            <Parameter Name="statü" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CalisanGuncelle">
+            <Parameter Name="calisanNo" Mode="In" Type="Int32" />
+            <Parameter Name="calisanAdi" Mode="In" Type="String" />
+            <Parameter Name="statu" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CalisanListele" ReturnType="Collection(VeterinerRandevuModel.CalisanListele_Result)" />
+          <FunctionImport Name="CalisanSil">
+          <Parameter Name="calisanNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="HastaEkle">
+            <Parameter Name="hastaAdi" Mode="In" Type="String" />
+            <Parameter Name="hastaCinsi" Mode="In" Type="String" />
+            <Parameter Name="hastaYas" Mode="In" Type="Int32" />
+            <Parameter Name="ebeveyn" Mode="In" Type="String" />
+            <Parameter Name="telefon" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="HastaGuncelle">
+            <Parameter Name="hastano" Mode="In" Type="Int32" />
+            <Parameter Name="hastaAdi" Mode="In" Type="String" />
+            <Parameter Name="hastaCinsi" Mode="In" Type="String" />
+            <Parameter Name="hastaYas" Mode="In" Type="Int32" />
+            <Parameter Name="ebeveyn" Mode="In" Type="String" />
+            <Parameter Name="telefon" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="HastaListele" ReturnType="Collection(VeterinerRandevuModel.HastaListele_Result)" />
+          <FunctionImport Name="HastaSil">
+          <Parameter Name="hastano" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="IslemEkle">
+            <Parameter Name="islemAd" Mode="In" Type="String" />
+            <Parameter Name="islemUcret" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="IslemGuncelle">
+            <Parameter Name="islemno" Mode="In" Type="Int32" />
+            <Parameter Name="islemAd" Mode="In" Type="String" />
+            <Parameter Name="islemUcret" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="IslemListele" ReturnType="Collection(VeterinerRandevuModel.IslemListele_Result)" />
+          <FunctionImport Name="IslemSil">
+          <Parameter Name="islemno" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="KullaniciEkle">
+            <Parameter Name="kullaniciAd" Mode="In" Type="String" />
+            <Parameter Name="sifre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="KullaniciGuncelle">
+            <Parameter Name="kullaniciNo" Mode="In" Type="Int32" />
+            <Parameter Name="kullaniciAd" Mode="In" Type="String" />
+            <Parameter Name="sifre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="KullaniciListele" ReturnType="Collection(VeterinerRandevuModel.KullaniciListele_Result)" />
+          <FunctionImport Name="KullaniciSil">
+          <Parameter Name="kullaniciNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RandevuEkle">
+            <Parameter Name="hastano" Mode="In" Type="Int32" />
+            <Parameter Name="calisanNo" Mode="In" Type="Int32" />
+            <Parameter Name="islemNo" Mode="In" Type="Int32" />
+            <Parameter Name="randevudate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="RandevuGuncelle">
+            <Parameter Name="randevuno" Mode="In" Type="Int32" />
+            <Parameter Name="hastano" Mode="In" Type="Int32" />
+            <Parameter Name="calisanNo" Mode="In" Type="Int32" />
+            <Parameter Name="islemNo" Mode="In" Type="Int32" />
+            <Parameter Name="randevudate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="RandevuListele" ReturnType="Collection(VeterinerRandevuModel.RandevuListele_Result)" />
+          <FunctionImport Name="RandevuSil">
+          <Parameter Name="randevuno" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <AssociationSet Name="FK_Randevular_Calisanlar" Association="VeterinerRandevuModel.FK_Randevular_Calisanlar">
+            <End Role="Calisanlar" EntitySet="Calisanlars" />
+            <End Role="Randevular" EntitySet="Randevulars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevular_Hastalar" Association="VeterinerRandevuModel.FK_Randevular_Hastalar">
+            <End Role="Hastalar" EntitySet="Hastalars" />
+            <End Role="Randevular" EntitySet="Randevulars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevular_Islemler" Association="VeterinerRandevuModel.FK_Randevular_Islemler">
+            <End Role="Islemler" EntitySet="Islemlers" />
+            <End Role="Randevular" EntitySet="Randevulars" />
+          </AssociationSet>
+          <FunctionImport Name="KullaniciAra" ReturnType="Collection(VeterinerRandevuModel.KullaniciAra_Result)">
+          <Parameter Name="kullaniciAd" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CalAdiAra" ReturnType="Collection(VeterinerRandevuModel.CalAdiAra_Result)">
+          <Parameter Name="calisanAd" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CalStatAra" ReturnType="Collection(VeterinerRandevuModel.CalStatAra_Result)">
+          <Parameter Name="statu" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EbeveynTelAra" ReturnType="Collection(VeterinerRandevuModel.EbeveynTelAra_Result)">
+          <Parameter Name="telefon" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="HastaAdAra" ReturnType="Collection(VeterinerRandevuModel.HastaAdAra_Result)">
+          <Parameter Name="hastaAd" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="HastaCinsAra" ReturnType="Collection(VeterinerRandevuModel.HastaCinsAra_Result)">
+          <Parameter Name="hastacins" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="HastaEbeveynAra" ReturnType="Collection(VeterinerRandevuModel.HastaEbeveynAra_Result)">
+          <Parameter Name="ebeveyn" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="HastaYasAra" ReturnType="Collection(VeterinerRandevuModel.HastaYasAra_Result)">
+          <Parameter Name="hastayas" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="IslemAdAra" ReturnType="Collection(VeterinerRandevuModel.IslemAdAra_Result)">
+          <Parameter Name="islemAd" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="HastUygIslemler" ReturnType="Collection(VeterinerRandevuModel.HastUygIslemler_Result)" />
+          <FunctionImport Name="RandFatura" ReturnType="Collection(VeterinerRandevuModel.RandFatura_Result)" />
+          <FunctionImport Name="YilllaraGoreKazanclari" ReturnType="Collection(VeterinerRandevuModel.YilllaraGoreKazanclari_Result)" />
+          <FunctionImport Name="YilllaraGoreYapIslemler" ReturnType="Collection(VeterinerRandevuModel.YilllaraGoreYapIslemler_Result)" />
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(VeterinerRandevuModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(VeterinerRandevuModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="sp_alterdiagram1">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram1">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram1">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition1" ReturnType="Collection(VeterinerRandevuModel.sp_helpdiagramdefinition1_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams1" ReturnType="Collection(VeterinerRandevuModel.sp_helpdiagrams1_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram1">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams1" />
+          <FunctionImport Name="Faturalar" ReturnType="Collection(VeterinerRandevuModel.Faturalar_Result)" />
+        </EntityContainer>
+        <ComplexType Name="CalisanListele_Result">
+          <Property Type="Int32" Name="calisanNo" Nullable="false" />
+          <Property Type="String" Name="calisanAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="statu" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="HastaListele_Result">
+          <Property Type="Int32" Name="hastano" Nullable="false" />
+          <Property Type="String" Name="hastaAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="hastaCinsi" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="hastaYas" Nullable="true" />
+          <Property Type="String" Name="Ebeveyn" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Tel" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="IslemListele_Result">
+          <Property Type="Int32" Name="islemNo" Nullable="false" />
+          <Property Type="String" Name="islemAd" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="islemUcret" Nullable="true" Precision="18" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="KullaniciListele_Result">
+          <Property Type="Int32" Name="kullaniciNo" Nullable="false" />
+          <Property Type="String" Name="kullaniciAd" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="sifre" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="RandevuListele_Result">
+          <Property Type="Int32" Name="randevuNo" Nullable="false" />
+          <Property Type="Int32" Name="hastano" Nullable="true" />
+          <Property Type="Int32" Name="calisanNo" Nullable="true" />
+          <Property Type="Int32" Name="islemNo" Nullable="true" />
+          <Property Type="DateTime" Name="RandevuDate" Nullable="true" Precision="23" />
+        </ComplexType>
+        <Association Name="FK_Randevular_Calisanlar">
+          <End Type="VeterinerRandevuModel.Calisanlar" Role="Calisanlar" Multiplicity="0..1" />
+          <End Type="VeterinerRandevuModel.Randevular" Role="Randevular" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Calisanlar">
+              <PropertyRef Name="calisanNo" />
+            </Principal>
+            <Dependent Role="Randevular">
+              <PropertyRef Name="calisanNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevular_Hastalar">
+          <End Type="VeterinerRandevuModel.Hastalar" Role="Hastalar" Multiplicity="0..1" />
+          <End Type="VeterinerRandevuModel.Randevular" Role="Randevular" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hastalar">
+              <PropertyRef Name="hastano" />
+            </Principal>
+            <Dependent Role="Randevular">
+              <PropertyRef Name="hastano" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevular_Islemler">
+          <End Type="VeterinerRandevuModel.Islemler" Role="Islemler" Multiplicity="0..1" />
+          <End Type="VeterinerRandevuModel.Randevular" Role="Randevular" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Islemler">
+              <PropertyRef Name="islemNo" />
+            </Principal>
+            <Dependent Role="Randevular">
+              <PropertyRef Name="islemNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="KullaniciAra_Result">
+          <Property Type="Int32" Name="kullaniciNo" Nullable="false" />
+          <Property Type="String" Name="kullaniciAd" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="sifre" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="CalAdiAra_Result">
+          <Property Type="Int32" Name="calisanNo" Nullable="false" />
+          <Property Type="String" Name="calisanAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="statu" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="CalStatAra_Result">
+          <Property Type="Int32" Name="calisanNo" Nullable="false" />
+          <Property Type="String" Name="calisanAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="statu" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="EbeveynTelAra_Result">
+          <Property Type="Int32" Name="hastano" Nullable="false" />
+          <Property Type="String" Name="hastaAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="hastaCinsi" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="hastaYas" Nullable="true" />
+          <Property Type="String" Name="Ebeveyn" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Tel" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="HastaAdAra_Result">
+          <Property Type="Int32" Name="hastano" Nullable="false" />
+          <Property Type="String" Name="hastaAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="hastaCinsi" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="hastaYas" Nullable="true" />
+          <Property Type="String" Name="Ebeveyn" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Tel" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="HastaCinsAra_Result">
+          <Property Type="Int32" Name="hastano" Nullable="false" />
+          <Property Type="String" Name="hastaAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="hastaCinsi" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="hastaYas" Nullable="true" />
+          <Property Type="String" Name="Ebeveyn" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Tel" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="HastaEbeveynAra_Result">
+          <Property Type="Int32" Name="hastano" Nullable="false" />
+          <Property Type="String" Name="hastaAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="hastaCinsi" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="hastaYas" Nullable="true" />
+          <Property Type="String" Name="Ebeveyn" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Tel" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="HastaYasAra_Result">
+          <Property Type="Int32" Name="hastano" Nullable="false" />
+          <Property Type="String" Name="hastaAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="hastaCinsi" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="hastaYas" Nullable="true" />
+          <Property Type="String" Name="Ebeveyn" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Tel" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="IslemAdAra_Result">
+          <Property Type="Int32" Name="islemNo" Nullable="false" />
+          <Property Type="String" Name="islemAd" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="islemUcret" Nullable="true" Precision="18" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="HastUygIslemler_Result">
+          <Property Type="String" Name="hastaAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="islemAd" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="RandFatura_Result">
+          <Property Type="DateTime" Name="RandevuGünü" Nullable="true" Precision="23" />
+          <Property Type="String" Name="hastaAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Ebeveyn" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Column1" Nullable="true" Precision="38" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="YilllaraGoreKazanclari_Result">
+          <Property Type="Int32" Name="Yıllar" Nullable="true" />
+          <Property Type="String" Name="islemAd" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="ToplamKazanç" Nullable="true" Precision="38" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="YilllaraGoreYapIslemler_Result">
+          <Property Type="Int32" Name="Yıllar" Nullable="true" />
+          <Property Type="String" Name="islemAd" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="İşlemSayısı" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition1_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams1_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Faturalar_Result">
+          <Property Type="DateTime" Name="RandevuTarihi" Nullable="true" Precision="23" />
+          <Property Type="String" Name="hastaAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Ebeveyn" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="FaturaToplam" Nullable="true" Precision="38" Scale="0" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VeterinerRandevuModelStoreContainer" CdmEntityContainer="VeterinerRandevuEntities">
+          <EntitySetMapping Name="Calisanlars">
+            <EntityTypeMapping TypeName="VeterinerRandevuModel.Calisanlar">
+              <MappingFragment StoreEntitySet="Calisanlar">
+                <ScalarProperty Name="calisanNo" ColumnName="calisanNo" />
+                <ScalarProperty Name="calisanAdi" ColumnName="calisanAdi" />
+                <ScalarProperty Name="statu" ColumnName="statu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Hastalars">
+            <EntityTypeMapping TypeName="VeterinerRandevuModel.Hastalar">
+              <MappingFragment StoreEntitySet="Hastalar">
+                <ScalarProperty Name="hastano" ColumnName="hastano" />
+                <ScalarProperty Name="hastaAdi" ColumnName="hastaAdi" />
+                <ScalarProperty Name="hastaCinsi" ColumnName="hastaCinsi" />
+                <ScalarProperty Name="hastaYas" ColumnName="hastaYas" />
+                <ScalarProperty Name="Ebeveyn" ColumnName="Ebeveyn" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Islemlers">
+            <EntityTypeMapping TypeName="VeterinerRandevuModel.Islemler">
+              <MappingFragment StoreEntitySet="Islemler">
+                <ScalarProperty Name="islemNo" ColumnName="islemNo" />
+                <ScalarProperty Name="islemAd" ColumnName="islemAd" />
+                <ScalarProperty Name="islemUcret" ColumnName="islemUcret" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kullanicilars">
+            <EntityTypeMapping TypeName="VeterinerRandevuModel.Kullanicilar">
+              <MappingFragment StoreEntitySet="Kullanicilar">
+                <ScalarProperty Name="kullaniciNo" ColumnName="kullaniciNo" />
+                <ScalarProperty Name="kullaniciAd" ColumnName="kullaniciAd" />
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Randevulars">
+            <EntityTypeMapping TypeName="VeterinerRandevuModel.Randevular">
+              <MappingFragment StoreEntitySet="Randevular">
+                <ScalarProperty Name="randevuNo" ColumnName="randevuNo" />
+                <ScalarProperty Name="hastano" ColumnName="hastano" />
+                <ScalarProperty Name="calisanNo" ColumnName="calisanNo" />
+                <ScalarProperty Name="islemNo" ColumnName="islemNo" />
+                <ScalarProperty Name="RandevuDate" ColumnName="RandevuDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CalisanEkle" FunctionName="VeterinerRandevuModel.Store.CalisanEkle" />
+          <FunctionImportMapping FunctionImportName="CalisanGuncelle" FunctionName="VeterinerRandevuModel.Store.CalisanGuncelle" />
+          <FunctionImportMapping FunctionImportName="CalisanListele" FunctionName="VeterinerRandevuModel.Store.CalisanListele">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.CalisanListele_Result">
+                <ScalarProperty Name="calisanNo" ColumnName="calisanNo" />
+                <ScalarProperty Name="calisanAdi" ColumnName="calisanAdi" />
+                <ScalarProperty Name="statu" ColumnName="statu" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CalisanSil" FunctionName="VeterinerRandevuModel.Store.CalisanSil" />
+          <FunctionImportMapping FunctionImportName="HastaEkle" FunctionName="VeterinerRandevuModel.Store.HastaEkle" />
+          <FunctionImportMapping FunctionImportName="HastaGuncelle" FunctionName="VeterinerRandevuModel.Store.HastaGuncelle" />
+          <FunctionImportMapping FunctionImportName="HastaListele" FunctionName="VeterinerRandevuModel.Store.HastaListele">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.HastaListele_Result">
+                <ScalarProperty Name="hastano" ColumnName="hastano" />
+                <ScalarProperty Name="hastaAdi" ColumnName="hastaAdi" />
+                <ScalarProperty Name="hastaCinsi" ColumnName="hastaCinsi" />
+                <ScalarProperty Name="hastaYas" ColumnName="hastaYas" />
+                <ScalarProperty Name="Ebeveyn" ColumnName="Ebeveyn" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="HastaSil" FunctionName="VeterinerRandevuModel.Store.HastaSil" />
+          <FunctionImportMapping FunctionImportName="IslemEkle" FunctionName="VeterinerRandevuModel.Store.IslemEkle" />
+          <FunctionImportMapping FunctionImportName="IslemGuncelle" FunctionName="VeterinerRandevuModel.Store.IslemGuncelle" />
+          <FunctionImportMapping FunctionImportName="IslemListele" FunctionName="VeterinerRandevuModel.Store.IslemListele">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.IslemListele_Result">
+                <ScalarProperty Name="islemNo" ColumnName="islemNo" />
+                <ScalarProperty Name="islemAd" ColumnName="islemAd" />
+                <ScalarProperty Name="islemUcret" ColumnName="islemUcret" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IslemSil" FunctionName="VeterinerRandevuModel.Store.IslemSil" />
+          <FunctionImportMapping FunctionImportName="KullaniciEkle" FunctionName="VeterinerRandevuModel.Store.KullaniciEkle" />
+          <FunctionImportMapping FunctionImportName="KullaniciGuncelle" FunctionName="VeterinerRandevuModel.Store.KullaniciGuncelle" />
+          <FunctionImportMapping FunctionImportName="KullaniciListele" FunctionName="VeterinerRandevuModel.Store.KullaniciListele">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.KullaniciListele_Result">
+                <ScalarProperty Name="kullaniciNo" ColumnName="kullaniciNo" />
+                <ScalarProperty Name="kullaniciAd" ColumnName="kullaniciAd" />
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="KullaniciSil" FunctionName="VeterinerRandevuModel.Store.KullaniciSil" />
+          <FunctionImportMapping FunctionImportName="RandevuEkle" FunctionName="VeterinerRandevuModel.Store.RandevuEkle" />
+          <FunctionImportMapping FunctionImportName="RandevuGuncelle" FunctionName="VeterinerRandevuModel.Store.RandevuGuncelle" />
+          <FunctionImportMapping FunctionImportName="RandevuListele" FunctionName="VeterinerRandevuModel.Store.RandevuListele">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.RandevuListele_Result">
+                <ScalarProperty Name="randevuNo" ColumnName="randevuNo" />
+                <ScalarProperty Name="hastano" ColumnName="hastano" />
+                <ScalarProperty Name="calisanNo" ColumnName="calisanNo" />
+                <ScalarProperty Name="islemNo" ColumnName="islemNo" />
+                <ScalarProperty Name="RandevuDate" ColumnName="RandevuDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="RandevuSil" FunctionName="VeterinerRandevuModel.Store.RandevuSil" />
+          <FunctionImportMapping FunctionImportName="KullaniciAra" FunctionName="VeterinerRandevuModel.Store.KullaniciAra">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.KullaniciAra_Result">
+                <ScalarProperty Name="kullaniciNo" ColumnName="kullaniciNo" />
+                <ScalarProperty Name="kullaniciAd" ColumnName="kullaniciAd" />
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CalAdiAra" FunctionName="VeterinerRandevuModel.Store.CalAdiAra">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.CalAdiAra_Result">
+                <ScalarProperty Name="calisanNo" ColumnName="calisanNo" />
+                <ScalarProperty Name="calisanAdi" ColumnName="calisanAdi" />
+                <ScalarProperty Name="statu" ColumnName="statu" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CalStatAra" FunctionName="VeterinerRandevuModel.Store.CalStatAra">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.CalStatAra_Result">
+                <ScalarProperty Name="calisanNo" ColumnName="calisanNo" />
+                <ScalarProperty Name="calisanAdi" ColumnName="calisanAdi" />
+                <ScalarProperty Name="statu" ColumnName="statu" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="EbeveynTelAra" FunctionName="VeterinerRandevuModel.Store.EbeveynTelAra">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.EbeveynTelAra_Result">
+                <ScalarProperty Name="hastano" ColumnName="hastano" />
+                <ScalarProperty Name="hastaAdi" ColumnName="hastaAdi" />
+                <ScalarProperty Name="hastaCinsi" ColumnName="hastaCinsi" />
+                <ScalarProperty Name="hastaYas" ColumnName="hastaYas" />
+                <ScalarProperty Name="Ebeveyn" ColumnName="Ebeveyn" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="HastaAdAra" FunctionName="VeterinerRandevuModel.Store.HastaAdAra">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.HastaAdAra_Result">
+                <ScalarProperty Name="hastano" ColumnName="hastano" />
+                <ScalarProperty Name="hastaAdi" ColumnName="hastaAdi" />
+                <ScalarProperty Name="hastaCinsi" ColumnName="hastaCinsi" />
+                <ScalarProperty Name="hastaYas" ColumnName="hastaYas" />
+                <ScalarProperty Name="Ebeveyn" ColumnName="Ebeveyn" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="HastaCinsAra" FunctionName="VeterinerRandevuModel.Store.HastaCinsAra">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.HastaCinsAra_Result">
+                <ScalarProperty Name="hastano" ColumnName="hastano" />
+                <ScalarProperty Name="hastaAdi" ColumnName="hastaAdi" />
+                <ScalarProperty Name="hastaCinsi" ColumnName="hastaCinsi" />
+                <ScalarProperty Name="hastaYas" ColumnName="hastaYas" />
+                <ScalarProperty Name="Ebeveyn" ColumnName="Ebeveyn" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="HastaEbeveynAra" FunctionName="VeterinerRandevuModel.Store.HastaEbeveynAra">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.HastaEbeveynAra_Result">
+                <ScalarProperty Name="hastano" ColumnName="hastano" />
+                <ScalarProperty Name="hastaAdi" ColumnName="hastaAdi" />
+                <ScalarProperty Name="hastaCinsi" ColumnName="hastaCinsi" />
+                <ScalarProperty Name="hastaYas" ColumnName="hastaYas" />
+                <ScalarProperty Name="Ebeveyn" ColumnName="Ebeveyn" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="HastaYasAra" FunctionName="VeterinerRandevuModel.Store.HastaYasAra">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.HastaYasAra_Result">
+                <ScalarProperty Name="hastano" ColumnName="hastano" />
+                <ScalarProperty Name="hastaAdi" ColumnName="hastaAdi" />
+                <ScalarProperty Name="hastaCinsi" ColumnName="hastaCinsi" />
+                <ScalarProperty Name="hastaYas" ColumnName="hastaYas" />
+                <ScalarProperty Name="Ebeveyn" ColumnName="Ebeveyn" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IslemAdAra" FunctionName="VeterinerRandevuModel.Store.IslemAdAra">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.IslemAdAra_Result">
+                <ScalarProperty Name="islemNo" ColumnName="islemNo" />
+                <ScalarProperty Name="islemAd" ColumnName="islemAd" />
+                <ScalarProperty Name="islemUcret" ColumnName="islemUcret" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="HastUygIslemler" FunctionName="VeterinerRandevuModel.Store.HastUygIslemler">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.HastUygIslemler_Result">
+                <ScalarProperty Name="hastaAdi" ColumnName="hastaAdi" />
+                <ScalarProperty Name="islemAd" ColumnName="islemAd" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="YilllaraGoreKazanclari" FunctionName="VeterinerRandevuModel.Store.YilllaraGoreKazanclari">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.YilllaraGoreKazanclari_Result">
+                <ScalarProperty Name="Yıllar" ColumnName="Yıllar" />
+                <ScalarProperty Name="islemAd" ColumnName="islemAd" />
+                <ScalarProperty Name="ToplamKazanç" ColumnName="ToplamKazanç" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="YilllaraGoreYapIslemler" FunctionName="VeterinerRandevuModel.Store.YilllaraGoreYapIslemler">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.YilllaraGoreYapIslemler_Result">
+                <ScalarProperty Name="Yıllar" ColumnName="Yıllar" />
+                <ScalarProperty Name="islemAd" ColumnName="islemAd" />
+                <ScalarProperty Name="İşlemSayısı" ColumnName="İşlemSayısı" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Faturalar" FunctionName="VeterinerRandevuModel.Store.Faturalar">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VeterinerRandevuModel.Faturalar_Result">
+                <ScalarProperty Name="RandevuTarihi" ColumnName="RandevuTarihi" />
+                <ScalarProperty Name="hastaAdi" ColumnName="hastaAdi" />
+                <ScalarProperty Name="Ebeveyn" ColumnName="Ebeveyn" />
+                <ScalarProperty Name="FaturaToplam" ColumnName="FaturaToplam" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
